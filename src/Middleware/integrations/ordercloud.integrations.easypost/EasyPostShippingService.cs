@@ -51,6 +51,7 @@ namespace ordercloud.integrations.easypost
 		private readonly EasyPostConfig _config;
 		private const string BaseUrl = "https://api.easypost.com/v2";
 		public const string FreeShipping = "FREE_SHIPPING";
+		public const string NoResponseShipping = "BEST_DEAL_SHIPPING";
 
 		public EasyPostShippingService(EasyPostConfig config)
 		{
@@ -80,11 +81,17 @@ namespace ordercloud.integrations.easypost
 			{
 				ShipEstimates = groupedLineItems.Select((lineItems, index) =>
 				{
+					return MockRatesForNoResponse(lineItems.ToList());
+
 					// If all line items in the list have FreeShipping, then Mock rates
 					if (lineItems.ToList().All(li => li.Product?.xp?.FreeShipping))
                     {
 						return MockRatesForFreeShipping(lineItems.ToList());
 					}
+					if (easyPostResponses[0][0]?.rates?.Count() < 1)
+                    {
+						return MockRatesForNoResponse(lineItems.ToList());
+                    }
 					var firstLi = lineItems.First();
 					var shipMethods = EasyPostMappers.MapRates(easyPostResponses[index]);
 					return new ShipEstimate()
@@ -103,7 +110,32 @@ namespace ordercloud.integrations.easypost
 			return shipEstimateResponse;
 		}
 
-		public ShipEstimate MockRatesForFreeShipping(List<LineItem> lineItems)
+        private ShipEstimate MockRatesForNoResponse(List<LineItem> lineItems)
+        {
+			decimal shippingCalcRate = .15M;
+
+			var firstLi = lineItems.First();
+			return new ShipEstimate
+			{
+				ID = NoResponseShipping + $"_{firstLi.SupplierID}",
+				ShipMethods = new List<ShipMethod> {
+					new ShipMethod {
+						ID = NoResponseShipping + $"_{firstLi.SupplierID}",
+						Cost = Decimal.Round(firstLi.LineTotal * shippingCalcRate, 2),
+						Name = "Express",
+						EstimatedTransitDays = 1
+					}
+				},
+				ShipEstimateItems = lineItems.Select(li => new ShipEstimateItem() { LineItemID = li.ID, Quantity = li.Quantity }).ToList(),
+				xp =
+				{
+					SupplierID = firstLi.SupplierID,
+					ShipFromAddressID = firstLi.ShipFromAddressID
+                }
+			};
+		}
+
+        public ShipEstimate MockRatesForFreeShipping(List<LineItem> lineItems)
         {
 			var firstLi = lineItems.First();
 			return new ShipEstimate
