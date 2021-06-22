@@ -113,7 +113,7 @@ namespace Headstart.Models
         public List<HSSpecValue> SpecValues { get; set; }
         public string NewID { get; set; }
         public List<ImageAsset> Images { get; set; }
-        public string[] VisibleToBuyers { get; set; } = new string[] {}
+        public string[] VisibleToBuyers { get; set; } = new string[] { };
     }
 
     [SwaggerModel]
