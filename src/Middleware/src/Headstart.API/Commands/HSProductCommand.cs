@@ -319,7 +319,7 @@ namespace Headstart.API.Commands.Crud
 			IList<Spec> existingSpecs = (await _oc.Products.ListSpecsAsync(id, accessToken: token)).Items.ToList();
 			// Two variant lists to compare (requestVariants and existingVariants)
 			IList<HSVariant> requestVariants = superProduct.Variants;
-			IList<Variant> existingVariants = (await _oc.Products.ListVariantsAsync(id, pageSize: 100, accessToken: token)).Items.ToList();
+			IList<HSVariant> existingVariants = (await _oc.Products.ListVariantsAsync<HSVariant>(id, pageSize: 100, accessToken: token)).Items.ToList();
 			// Calculate differences in specs - specs to add, and specs to delete
 			var specsToAdd = requestSpecs.Where(s => !existingSpecs.Any(s2 => s2.ID == s.ID)).ToList();
 			var specsToDelete = existingSpecs.Where(s => !requestSpecs.Any(s2 => s2.ID == s.ID)).ToList();
@@ -359,7 +359,7 @@ namespace Headstart.API.Commands.Crud
 			var variantsRemoved = existingVariants.Any(v => !requestVariants.Any(v2 => v2.ID == v.ID));
 			bool hasVariantChange = false;
 
-			foreach (Variant variant in requestVariants)
+			foreach (HSVariant variant in requestVariants)
 			{
 				ValidateRequestVariant(variant);
 				var currVariant = existingVariants.Where(v => v.ID == variant.ID);
@@ -461,7 +461,7 @@ namespace Headstart.API.Commands.Crud
 
 		}
 
-		private bool HasVariantChange(Variant variant, Variant currVariant)
+		private bool HasVariantChange(HSVariant variant, HSVariant currVariant)
 		{
 			if (variant.Active != currVariant.Active) { return true; }
 			if (variant.Description != currVariant.Description) { return true; }
@@ -472,6 +472,7 @@ namespace Headstart.API.Commands.Crud
 			if (variant.ShipWidth != currVariant.ShipWidth) { return true; }
 			if (variant?.Inventory?.LastUpdated != currVariant?.Inventory?.LastUpdated) { return true; }
 			if (variant?.Inventory?.QuantityAvailable != currVariant?.Inventory?.QuantityAvailable) { return true; }
+			if (variant.xp.VisibleToBuyers.SequenceEqual(currVariant?.xp?.VisibleToBuyers)) { return true; }
 
 			return false;
 		}
