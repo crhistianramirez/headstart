@@ -129,7 +129,7 @@
             </ng-template>
             <ng-template ngbPanelContent>
               <ocm-checkout-confirm [isAnon]="isAnon" [order]="order" [orderPromos]="orderPromotions"
-                [lineItems]="lineItems" [payments]="payments"
+                [lineItems]="lineItems" [payments]="payments.Items"
                 (submitOrderWithComment)="submitOrderWithComment($event.detail)">
               </ocm-checkout-confirm>
             </ng-template>
