@@ -142,7 +142,9 @@ export class PromotionEditComponent implements OnInit, OnChanges {
       .List({ pageSize: 100, sortBy: ['Name'] })
       .toPromise()
     this.suppliers = supplierResponse.Items
-    await this.selectSupplier(existingSupplierID || this.suppliers[0].ID)
+    if (this.suppliers?.length) {
+      await this.selectSupplier(existingSupplierID || this.suppliers[0].ID)
+    }
   }
 
   async selectSupplier(supplierID: string): Promise<void> {
@@ -327,14 +329,16 @@ export class PromotionEditComponent implements OnInit, OnChanges {
       this._promotionEditable,
       this._promotionStatic
     )
-    this._promotionEditable.ValueExpression = this.promotionService.buildValueExpression(
-      this._promotionEditable?.xp,
-      this.selectedSupplier
-    )
-    this._promotionEditable.EligibleExpression = this.promotionService.buildEligibleExpression(
-      this._promotionEditable?.xp,
-      this.selectedSupplier
-    )
+    this._promotionEditable.ValueExpression =
+      this.promotionService.buildValueExpression(
+        this._promotionEditable?.xp,
+        this.selectedSupplier
+      )
+    this._promotionEditable.EligibleExpression =
+      this.promotionService.buildEligibleExpression(
+        this._promotionEditable?.xp,
+        this.selectedSupplier
+      )
   }
 
   promoTypeCheck(type: HSPromoType): boolean {

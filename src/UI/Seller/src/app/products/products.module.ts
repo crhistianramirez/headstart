@@ -11,10 +11,7 @@ import { ProductVariations } from './components/product-variations/product-varia
 import { ProductFilters } from './components/product-filters/product-filters.component'
 import { ProductPricingComponent } from './components/product-pricing/product-pricing.component'
 import { PriceBreakEditor } from './components/price-break-editor/price-break-editor.component'
-import {
-  NgbModule,
-  NgbTooltipModule,
-} from '@ng-bootstrap/ng-bootstrap'
+import { NgbModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 
 @NgModule({
   imports: [
@@ -22,7 +19,7 @@ import {
     ProductsRoutingModule,
     PerfectScrollbarModule,
     NgbModule,
-    NgbTooltipModule,
+    NgbTooltipModule
   ],
   declarations: [
     ProductTableComponent,
@@ -35,4 +32,4 @@ import {
     ProductFilters,
   ],
 })
-export class ProductsModule { }
+export class ProductsModule {}

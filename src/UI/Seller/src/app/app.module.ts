@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { HttpClientModule, HttpClient } from '@angular/common/http'
 
 // 3rd party
-import { OrderCloudModule, Configuration } from '@ordercloud/angular-sdk'
+import { OrderCloudModule } from '@ordercloud/angular-sdk'
 import { OcSDKConfig } from '@app-seller/config/ordercloud-sdk.config'
 import { CookieModule } from 'ngx-cookie'
 import { ToastrModule } from 'ngx-toastr'
@@ -38,7 +38,6 @@ import {
   SdkConfiguration,
 } from 'ordercloud-javascript-sdk'
 import { applicationConfiguration, ocAppConfig } from './config/app.config'
-import { CMSConfiguration } from '@ordercloud/cms-sdk'
 import { AuthModule } from './auth/auth.module'
 import { AutoAppendTokenInterceptor } from './auth/interceptors/auto-append-token/auto-append-token.interceptor'
 import { RefreshTokenInterceptor } from './auth/interceptors/refresh-token/refresh-token.interceptor'

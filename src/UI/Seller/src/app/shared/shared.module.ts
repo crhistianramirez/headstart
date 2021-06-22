@@ -3,6 +3,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { HttpClientModule } from '@angular/common/http'
 import { ReactiveFormsModule, FormsModule } from '@angular/forms'
+import { NgSelectModule } from '@ng-select/ng-select'
 import {
   NgbPaginationModule,
   NgbPopoverModule,
@@ -78,6 +79,7 @@ import { RouterModule } from '@angular/router'
     NgbTooltipModule,
     NgbProgressbarModule,
     NgbCollapseModule,
+    NgSelectModule,
 
     // Quill
     QuillModule.forRoot(),
@@ -87,6 +89,7 @@ import { RouterModule } from '@angular/router'
     CommonModule,
     HttpClientModule,
     ReactiveFormsModule,
+    FormsModule,
 
     // 3rd party UI
     FontAwesomeModule,
@@ -94,6 +97,7 @@ import { RouterModule } from '@angular/router'
     NgbDropdownModule,
     NgbProgressbarModule,
     NgbCollapseModule,
+    NgSelectModule,
 
     // app components
     SearchComponent,
@@ -167,7 +171,7 @@ import { RouterModule } from '@angular/router'
     ResourceBreadcrumbsComponent,
     SafeHTMLPipe,
     ProductNameWithSpecsPipe,
-    UnCamelPipe
+    UnCamelPipe,
   ],
 })
 export class SharedModule {

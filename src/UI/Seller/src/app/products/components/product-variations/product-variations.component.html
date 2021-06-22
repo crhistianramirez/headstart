@@ -315,7 +315,11 @@
                             "
                           />
                           <label
-                            class="custom-control-label small custom-label-height"
+                            class="
+                              custom-control-label
+                              small
+                              custom-label-height
+                            "
                             for="DefaultSpecOption_{{ opt.ID }}"
                             >Default
                           </label>
@@ -402,6 +406,7 @@
                   ADMIN.PRODUCT_EDIT.INVENTORY
                 </th>
                 <th scope="col" translate>ADMIN.PRODUCT_EDIT.TOTAL_MARKUP</th>
+                <th scope="col">Buyer Visibility</th>
               </tr>
             </thead>
             <tbody>
@@ -501,6 +506,19 @@
                         | currency: myCurrency?.Currency
                     }}
                   </td>
+                  <td>
+                    <ng-select
+                      [(ngModel)]="variant.xp.VisibleToBuyers"
+                      [multiple]="true"
+                      (change)="variantVisibilityChange(variant, i)"
+                    >
+                      <ng-option
+                        *ngFor="let buyer of buyers"
+                        [value]="buyer.ID"
+                        >{{ buyer.Name }}</ng-option
+                      >
+                    </ng-select>
+                  </td>
                 </tr>
                 <tr
                   *ngIf="
@@ -514,7 +532,8 @@
                     <div class="my-2">
                       <fa-icon
                         *ngIf="
-                          superProductEditable?.Product?.xp?.Images?.length && !readonly
+                          superProductEditable?.Product?.xp?.Images?.length &&
+                          !readonly
                         "
                         (click)="assignVariantImages = true"
                         [icon]="faPlusCircle"
