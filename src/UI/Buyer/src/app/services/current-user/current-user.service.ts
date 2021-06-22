@@ -15,10 +15,9 @@ export class CurrentUserService {
   private readonly MaxFavorites: number = 40
   private readonly favOrdersXP = 'FavoriteOrders'
   private readonly favProductsXP = 'FavoriteProducts'
-  public isAnonSubject: BehaviorSubject<boolean>;
-  private userSubject: BehaviorSubject<CurrentUser> = new BehaviorSubject<CurrentUser>(
-    null
-  )
+  public isAnonSubject: BehaviorSubject<boolean>
+  private userSubject: BehaviorSubject<CurrentUser> =
+    new BehaviorSubject<CurrentUser>(null)
 
   // users for determining location management permissions for a user
   private userGroups: BehaviorSubject<UserGroup[]> = new BehaviorSubject<
@@ -29,9 +28,9 @@ export class CurrentUserService {
     private tokenHelper: TokenHelperService,
     public cards: CreditCardService,
     public http: HttpClient,
-    private appConfig: AppConfig,
+    private appConfig: AppConfig
   ) {
-    this.isAnonSubject = new BehaviorSubject(true);
+    this.isAnonSubject = new BehaviorSubject(true)
   }
 
   get(): CurrentUser {
@@ -90,9 +89,7 @@ export class CurrentUserService {
       Authorization: `Bearer ${Tokens.GetAccessToken()}`,
     })
     const url = `${this.appConfig.middlewareUrl}/me/products/requestinfo`
-    await this.http
-      .post<void>(url, contactRequest, { headers })
-      .toPromise()
+    await this.http.post<void>(url, contactRequest, { headers }).toPromise()
   }
 
   private async MapToCurrentUser(user: MeUser): Promise<CurrentUser> {

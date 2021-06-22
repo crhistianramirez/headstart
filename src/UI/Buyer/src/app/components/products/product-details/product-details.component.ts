@@ -26,6 +26,7 @@ import { QtyChangeEvent, SpecFormEvent } from 'src/app/models/product.types'
 import { CurrentUser } from 'src/app/models/profile.types'
 import { ContactSupplierBody } from 'src/app/models/buyer.types'
 import { ModalState } from 'src/app/models/shared.types'
+import { flatten } from 'lodash'
 
 @Component({
   templateUrl: './product-details.component.html',
@@ -65,6 +66,7 @@ export class OCMProductDetails implements OnInit {
   specForm: FormGroup
   isInactiveVariant: boolean
   _disabledVariants: HSVariant[]
+  hiddenVariants: HSVariant[]
   variant: HSVariant
   variantInventory: number
   _productSupplier: HSSupplier
@@ -77,6 +79,7 @@ export class OCMProductDetails implements OnInit {
 
   @Input() set product(superProduct: SuperHSProduct) {
     this._superProduct = superProduct
+    this.hideVariants()
     this._product = superProduct.Product
     this.attachments = superProduct?.Product?.xp?.Documents
     this.priceBreaks = superProduct.PriceSchedule?.PriceBreaks
@@ -157,6 +160,26 @@ export class OCMProductDetails implements OnInit {
       if (!variant.Active) {
         this._disabledVariants.push(variant)
       }
+    })
+  }
+
+  hideVariants(): void {
+    const meUser = this.context.currentUser.get()
+    const meBuyerID = meUser?.Buyer?.ID
+    const visibleVariants = flatten(
+      this._superProduct.Variants.filter((v) =>
+        v.xp.VisibleToBuyers.includes(meBuyerID)
+      ).map((v) => v.Specs)
+    )
+
+    this._superProduct.Specs = this._superProduct.Specs.filter((s) => {
+      return visibleVariants.map((v) => v.Name).includes(s.Name)
+    }).map((s) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      ;(s as any).Options = s.Options.filter((o) => {
+        return visibleVariants.map((v) => v.OptionID).includes(o.ID)
+      })
+      return s
     })
   }
 
@@ -272,16 +295,15 @@ export class OCMProductDetails implements OnInit {
           this.specForm
         ),
         StatusByQuantity: {
-            Submitted: lineItem.Quantity,
-            Backordered: 0,
-            CancelRequested: 0,
-            Complete: 0,
-            ReturnRequested: 0,
-            Returned: 0,
-            Canceled: 0,
-            Open: 0
-        } as any
-        
+          Submitted: lineItem.Quantity,
+          Backordered: 0,
+          CancelRequested: 0,
+          Complete: 0,
+          ReturnRequested: 0,
+          Returned: 0,
+          Canceled: 0,
+          Open: 0,
+        } as any,
       }
       this.submittedQuoteOrder = await this.context.order.submitQuoteOrder(
         info,

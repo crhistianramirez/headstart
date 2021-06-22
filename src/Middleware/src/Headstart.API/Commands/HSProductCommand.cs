@@ -472,7 +472,7 @@ namespace Headstart.API.Commands.Crud
 			if (variant.ShipWidth != currVariant.ShipWidth) { return true; }
 			if (variant?.Inventory?.LastUpdated != currVariant?.Inventory?.LastUpdated) { return true; }
 			if (variant?.Inventory?.QuantityAvailable != currVariant?.Inventory?.QuantityAvailable) { return true; }
-			if (variant.xp.VisibleToBuyers.SequenceEqual(currVariant?.xp?.VisibleToBuyers)) { return true; }
+			if (!variant.xp.VisibleToBuyers.SequenceEqual(currVariant?.xp?.VisibleToBuyers)) { return true; }
 
 			return false;
 		}

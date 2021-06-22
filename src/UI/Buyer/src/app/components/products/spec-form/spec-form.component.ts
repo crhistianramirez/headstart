@@ -137,10 +137,7 @@ export class OCMSpecForm implements OnChanges {
     }
   }
 
-  isControlInactive(
-    ctrls: string[],
-    disabledVariant: HSVariant
-  ): boolean {
+  isControlInactive(ctrls: string[], disabledVariant: HSVariant): boolean {
     let controlCount = 0
     for (const variant of disabledVariant.Specs) {
       ctrlLoop: for (const controlValue of ctrls) {
@@ -199,7 +196,7 @@ export class OCMSpecForm implements OnChanges {
       value: spec.DefaultOptionID
         ? _find(spec.Options, (option) => {
             return option.ID === spec.DefaultOptionID
-          }).Value
+          })?.Value || spec.Options[0]?.Value
         : null,
       options: _map(spec.Options),
       disabledVariants: this.disabledVariants,
