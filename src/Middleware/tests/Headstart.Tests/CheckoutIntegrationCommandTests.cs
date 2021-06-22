@@ -29,34 +29,6 @@ namespace Headstart.Tests
         public const int FREE_SHIPPING_DAYS = 3;
 
         #region CheckoutIntegrationTests
-        [Test]
-        public async Task free_shipping_for_no_rates()
-        {
-            var shipItem1 = new ShipEstimateItem
-            {
-                LineItemID = "Line1"
-            };
-            var line1 = new HSLineItem
-            {
-                ID = "Line1",
-                LineSubtotal = 370,
-                SupplierID = "010"
-            };
-            var method1 = new HSShipMethod
-            {
-                ID = "NO_SHIPPING_RATES",
-                xp = new ShipMethodXP()
-            };
-            var worksheet = BuildOrderWorksheet(new HSLineItem[] { line1 });
-            var estimates = BuildEstimates(new[] { method1 }, new[] { shipItem1 });
-            var result = await estimates.ApplyShippingLogic(worksheet, _oc, FREE_SHIPPING_DAYS);
-            var methods = result[0].ShipMethods;
-
-            Assert.AreEqual(1, methods.Count());
-            Assert.AreEqual(0, methods[0].Cost);
-            Assert.AreEqual(method1.Name, methods[0].Name);
-            Assert.IsTrue(methods[0].xp.FreeShippingApplied);
-        }
 
         [Test]
         public async Task shipping_ignore_nongroundAsync()
